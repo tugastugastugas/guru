@@ -28,14 +28,26 @@ class UlasanController extends BaseController
             'user_id' => Session::get('id'), // ID pengguna yang sedang login
             'description' => 'User Masuk Ke Buat Guru.',
         ]);
+        $id_user = Session::get('id');
+// Ambil periode yang aktif
+$periode_aktif = DB::table('periode')
+    ->where('status', 'AKTIF')
+    ->first();  // Ambil satu periode yang aktif
 
-        // $guru = Guru::all();
-        $id_user = Session::get('id'); // ID pengguna yang sedang login
-        $guru = DB::table('guru')
-            ->leftJoin('ulasan', 'guru.id_guru', '=', 'ulasan.id_guru')
-            ->select('guru.*', 'ulasan.kritikan', 'ulasan.pujian', 'ulasan.id_ulasan')
-            ->get();
 
+if ($periode_aktif) {
+// Jika periode aktif ditemukan, ambil guru dan ulasan berdasarkan periode tersebut
+$guru = DB::table('guru')
+    ->leftJoin('ulasan', function($join) use ($id_user, $periode_aktif) {
+        $join->on('guru.id_guru', '=', 'ulasan.id_guru')
+            ->where('ulasan.id_user', '=', $id_user)
+            ->where('ulasan.id_periode', '=', $periode_aktif->id_periode);
+    })
+    ->select('guru.*', 'ulasan.kritikan', 'ulasan.pujian', 'ulasan.id_ulasan')
+    ->get();
+} else {
+$guru = collect(); // Jika tidak ada periode aktif, kosongkan daftar guru
+}
 
         echo view('header');
         echo view('menu');
@@ -43,62 +55,69 @@ class UlasanController extends BaseController
         echo view('footer');
     }
 
+    
+
     public function buat_ulasan(Request $request)
-    {
-        ActivityLog::create([
-            'action' => 'create',
-            'user_id' => Session::get('id'), // ID pengguna yang sedang login
-            'description' => 'User Menambah Ulasan.',
+{
+    ActivityLog::create([
+        'action' => 'create',
+        'user_id' => Session::get('id'), // ID pengguna yang sedang login
+        'description' => 'User Menambah Ulasan.',
+    ]);
+
+    try {
+        // Validasi inputan
+        $request->validate([
+            'kritikan' => 'required',
+            'pujian' => 'required',
+            'id_guru' => 'required',
         ]);
 
-        try {
-            // Validasi inputan
-            $request->validate([
-                'kritikan' => 'required',
-                'pujian' => 'required',
-                'id_guru' => 'required',
-            ]);
-
-            $id_user = Session::get('id');
-            $id_guru = $request->input('id_guru');
-            // Ambil id_periode dengan status AKTIF
-            $periodeAktif = DB::table('periode')->where('status', 'AKTIF')->first();
-            if (!$periodeAktif) {
-                return redirect()->back()->withErrors(['msg' => 'Tidak ada periode aktif saat ini.']);
-            }
-
-            $existingUlasan = Ulasan::where('id_user', $id_user)
-                ->where('id_guru', $id_guru)
-                ->exists();
-
-            if ($existingUlasan) {
-                // Menampilkan notifikasi bahwa ulasan sudah dibuat
-                return redirect()->back()->with('notification', 'Anda sudah memberikan ulasan untuk guru ini.');
-            }
-
-            // Simpan data ke tabel user
-            $ulasan = new Ulasan(); // Ubah variabel dari $quiz menjadi $ulasan untuk kejelasan
-            $ulasan->kritikan = $request->input('kritikan');
-            $ulasan->pujian = $request->input('pujian'); // Enkripsi password
-            $ulasan->id_user = $id_user;
-            $ulasan->id_guru = $id_guru;
-            $ulasan->id_periode = $periodeAktif->id_periode;
-
-            // Simpan ke database
-            $ulasan->save();
-
-            // Redirect ke halaman lain
-            return redirect()->back()->with('notification', 'Berhasil menambahkan ulasan.');
-        } catch (\Exception $e) {
-            // Redirect kembali dengan pesan kesalahan
-            Log::error('Gagal memperbarui periode: ' . $e->getMessage());
-            Log::info('Request Input:', $request->all());
-            return redirect()->back()->withErrors(['msg' => 'Gagal menambahkan akun. Silakan coba lagi.']);
+        $id_user = Session::get('id');
+        $id_guru = $request->input('id_guru');
+        
+        // Ambil id_periode dengan status AKTIF
+        $periodeAktif = DB::table('periode')->where('status', 'AKTIF')->first();
+        if (!$periodeAktif) {
+            return redirect()->back()->withErrors(['msg' => 'Tidak ada periode aktif saat ini.']);
         }
+
+        // Periksa apakah user sudah memberikan ulasan untuk guru ini pada periode yang aktif
+        $existingUlasan = Ulasan::where('id_user', $id_user)
+            ->where('id_guru', $id_guru)
+            ->where('id_periode', $periodeAktif->id_periode) // Tambahkan pengecekan id_periode
+            ->exists();
+
+        if ($existingUlasan) {
+            // Menampilkan notifikasi bahwa ulasan sudah dibuat
+            return redirect()->back()->with('notification', 'Anda sudah memberikan ulasan untuk guru ini pada periode ini.');
+        }
+
+        // Simpan data ke tabel ulasan
+        $ulasan = new Ulasan();
+        $ulasan->kritikan = $request->input('kritikan');
+        $ulasan->pujian = $request->input('pujian');
+        $ulasan->id_user = $id_user;
+        $ulasan->id_guru = $id_guru;
+        $ulasan->id_periode = $periodeAktif->id_periode;
+
+        // Simpan ke database
+        $ulasan->save();
+
+        // Redirect ke halaman lain
+        return redirect()->back()->with('notification', 'Berhasil menambahkan ulasan.');
+    } catch (\Exception $e) {
+        // Redirect kembali dengan pesan kesalahan
+        Log::error('Gagal menambahkan ulasan: ' . $e->getMessage());
+        Log::info('Request Input:', $request->all());
+        return redirect()->back()->withErrors(['msg' => 'Gagal menambahkan ulasan. Silakan coba lagi.']);
     }
+}
+
 
     public function gantiUlasan(Request $request)
     {
+        
         ActivityLog::create([
             'action' => 'update',
             'user_id' => Session::get('id'), // ID pengguna yang sedang login
@@ -110,7 +129,7 @@ class UlasanController extends BaseController
             $request->validate([
                 'kritikan' => 'required',
                 'pujian' => 'required',
-                'id_ulasan' => 'required|exists:ulasan,id_ulasan',
+                'id_ulasan' => 'required',
             ]);
 
             // Cari ulasan berdasarkan ID
@@ -119,7 +138,6 @@ class UlasanController extends BaseController
             // Perbarui data ulasan
             $ulasan->kritikan = $request->input('kritikan');
             $ulasan->pujian = $request->input('pujian');
-            $ulasan->updated_at = now();
             $ulasan->save();
 
             // Redirect dengan notifikasi berhasil
@@ -179,4 +197,38 @@ class UlasanController extends BaseController
         // Redirect dengan pesan sukses
         return redirect()->route('guru')->with('success', 'Data user berhasil dihapus');
     }
+
+    public function history()
+    {
+        ActivityLog::create([
+            'action' => 'create',
+            'user_id' => Session::get('id'), // ID pengguna yang sedang login
+            'description' => 'User Masuk Ke Buat Guru.',
+        ]);
+        
+        $id_user = Session::get('id');
+    
+        // Mengambil data dengan pengelompokan berdasarkan periode
+        $ulasan = DB::table('ulasan')
+            ->join('user', 'user.id_user', '=', 'ulasan.id_user')
+            ->join('periode', 'periode.id_periode', '=', 'ulasan.id_periode')
+            ->join('guru', 'guru.id_guru', '=', 'ulasan.id_guru')
+            ->select(
+                'user.username',
+                'guru.nama_guru',
+                'guru.mapel_guru',
+                'periode.nama_periode',
+                'ulasan.kritikan',
+                'ulasan.pujian'
+            )
+            ->where('user.id_user', $id_user) // Mengambil data sesuai session id_user
+            ->groupBy('periode.nama_periode', 'user.username', 'guru.nama_guru', 'guru.mapel_guru', 'ulasan.kritikan', 'ulasan.pujian') // Mengelompokkan berdasarkan periode
+            ->get();
+    
+        echo view('header');
+        echo view('menu');
+        echo view('history', compact('ulasan'));
+        echo view('footer');
+    }
+    
 }

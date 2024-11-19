@@ -29,22 +29,22 @@
                                 <td>{{ $sm->mapel_guru }}</td>
                                 <td>
                                     @if($sm->id_ulasan)
-                                    <span class="badge bg-success">Sudah Dinilai</span>
-                                    <button type="button" class="btn btn-outline-primary edit-ulasan"
-                                        data-bs-toggle="modal" data-bs-target="#editModal"
-                                        data-id_ulasan="{{ $sm->id_ulasan }}"
-                                        data-kritikan="{{ $sm->kritikan }}"
-                                        data-pujian="{{ $sm->pujian }}">
-                                        Edit Ulasan
-                                    </button>
+                                        <span class="badge bg-success">Sudah Dinilai</span>
+                                        <button type="button" class="btn btn-outline-primary edit-ulasan"
+                                            data-bs-toggle="modal" data-bs-target="#editUlasanModal"
+                                            data-id_ulasan="{{ $sm->id_ulasan }}"
+                                            data-kritikan="{{ $sm->kritikan }}"
+                                            data-pujian="{{ $sm->pujian }}">
+                                            Edit Ulasan
+                                        </button>
                                     @else
-                                    <button type="button" class="btn btn-outline-secondary edit-barang"
-                                        data-bs-toggle="modal" data-bs-target="#editModal"
-                                        data-id_guru="{{ $sm->id_guru }}"
-                                        data-nama_guru="{{ $sm->nama_guru }}"
-                                        data-mapel_guru="{{ $sm->mapel_guru }}">
-                                        Nilai Guru
-                                    </button>
+                                        <button type="button" class="btn btn-outline-secondary edit-barang"
+                                            data-bs-toggle="modal" data-bs-target="#editModal"
+                                            data-id_guru="{{ $sm->id_guru }}"
+                                            data-nama_guru="{{ $sm->nama_guru }}"
+                                            data-mapel_guru="{{ $sm->mapel_guru }}">
+                                            Nilai Guru
+                                        </button>
                                     @endif
                                 </td>
                             </tr>
@@ -101,7 +101,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="editUlasanModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -109,18 +109,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="" method="POST" id="editForm">
+                <form action="{{ route('ganti_ulasan') }}" method="POST" id="editForm">
                     @csrf
+                    @method('GET')
                     <input type="hidden" name="id_ulasan" id="edit-id_ulasan">
                     <input type="hidden" name="id_guru" id="edit-id_guru">
-                    <div class="mb-3">
-                        <label for="edit-nama_guru" class="form-label">Nama Guru</label>
-                        <input type="text" class="form-control" id="edit-nama_guru" name="nama_guru" disabled>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit-mapel_guru" class="form-label">Mapel Guru</label>
-                        <input type="text" class="form-control" id="edit-mapel_guru" name="mapel_guru" disabled>
-                    </div>
                     <div class="mb-3">
                         <label for="edit-kritikan" class="form-label">Kritikan</label>
                         <input type="text" class="form-control" id="edit-kritikan" name="kritikan" required>
@@ -158,21 +151,19 @@
 
 <script>
     $(document).on('click', '.edit-ulasan', function() {
-        // Ambil data ulasan
-        let id_ulasan = $(this).data('id_ulasan');
-        let kritikan = $(this).data('kritikan');
-        let pujian = $(this).data('pujian');
+    let id_ulasan = $(this).data('id_ulasan');
+    let kritikan = $(this).data('kritikan');
+    let pujian = $(this).data('pujian');
 
-        // Set nilai form action untuk update
-        $('#editForm').attr('action', '{{ route("ganti_ulasan") }}');
 
-        // Isi nilai input di modal edit
-        $('#edit-id_ulasan').val(id_ulasan);
-        $('#edit-kritikan').val(kritikan);
-        $('#edit-pujian').val(pujian);
+    // Isi nilai input di modal "Edit Ulasan"
+    $('#editUlasanModal #edit-id_ulasan').val(id_ulasan);
+    $('#editUlasanModal #edit-kritikan').val(kritikan);
+    $('#editUlasanModal #edit-pujian').val(pujian);
 
-        // Nonaktifkan input nama guru untuk edit ulasan
-        $('#edit-nama_guru').prop('disabled', true);
-        $('#edit-mapel_guru').prop('disabled', true);
-    });
+    // Tampilkan modal
+    $('#editUlasanModal').modal('show');
+});
+
+
 </script>

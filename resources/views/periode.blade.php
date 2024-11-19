@@ -119,7 +119,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit paket</h5>
+                <h5 class="modal-title" id="editModalLabel">Edit Periode</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -133,11 +133,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="edit-harga_paket" class="form-label">Tanggal Mulai</label>
-                        <input type="text" class="form-control" id="edit-tgl_mulai" name="tgl_mulai" required>
+                        <input type="date" class="form-control" id="edit-tgl_mulai" name="tgl_mulai" required>
                     </div>
                     <div class="mb-3">
                         <label for="edit-deskripsi_paket" class="form-label">Tanggal Akhir</label>
-                        <input type="text" class="form-control" id="edit-tgl_akhir" name="tgl_akhir" required>
+                        <input type="date" class="form-control" id="edit-tgl_akhir" name="tgl_akhir" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                 </form>

@@ -122,30 +122,39 @@ class PeriodeController extends BaseController
 
 
     public function aktif($id)
-    {
-        ActivityLog::create([
-            'action' => 'create',
-            'user_id' => Session::get('id'), // ID pengguna yang sedang login
-            'description' => 'User Mengaktifkan Periode.',
-        ]);
+{
+    ActivityLog::create([
+        'action' => 'create',
+        'user_id' => Session::get('id'), // ID pengguna yang sedang login
+        'description' => 'User Mengaktifkan Periode.',
+    ]);
 
-        try {
-            $id_user = Session::get('id');
-            $periode = Periode::findOrFail($id);
+    try {
+        // Dapatkan ID user dari session
+        $id_user = Session::get('id');
 
-            // Update data paket
-            $periode->status = "AKTIF";
+        // Temukan periode berdasarkan ID yang diberikan
+        $periode = Periode::findOrFail($id);
 
-            // Simpan perubahan ke database
-            $periode->save();
-
-            return redirect()->back()->with('success', 'Pengajuan paket berhasil diperbarui');
-        } catch (\Exception $e) {
-            Log::error('Gagal: ' . $e->getMessage());
-
-            return redirect()->back()->withErrors(['msg' => 'Gagal memperbarui paket. Silakan coba lagi.']);
+        // Menonaktifkan semua periode yang statusnya "AKTIF"
+        $periodeLain = Periode::where('status', 'AKTIF')->get();
+        foreach ($periodeLain as $item) {
+            $item->status = 'TIDAK AKTIF';
+            $item->save();
         }
+
+        // Mengupdate periode yang dipilih menjadi "AKTIF"
+        $periode->status = "AKTIF";
+        $periode->save();
+
+        return redirect()->back()->with('success', 'Pengajuan paket berhasil diperbarui');
+    } catch (\Exception $e) {
+        Log::error('Gagal: ' . $e->getMessage());
+
+        return redirect()->back()->withErrors(['msg' => 'Gagal memperbarui paket. Silakan coba lagi.']);
     }
+}
+
 
     public function tidak_aktif($id)
     {

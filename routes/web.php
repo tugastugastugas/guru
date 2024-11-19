@@ -104,9 +104,13 @@ Route::delete('/guru/{id_guru}', [GuruController::class, 'guru_destroy'])->name(
 Route::get('/guru/update/{id}', [GuruController::class, 'update'])->name('guru.update');
 
 
-// ROUTE Ulasan
+// ROUTE ULASAN
 Route::get('/ulasan', [UlasanController::class, 'ulasan'])
     ->name('ulasan');
 Route::get('buat_ulasan', [UlasanController::class, 'buat_ulasan'])
     ->name('buat_ulasan');
 Route::get('/ulasan/ganti', [UlasanController::class, 'gantiUlasan'])->name('ganti_ulasan');
+
+// ROUTE HISTORY
+Route::get('/history', [UlasanController::class, 'history'])
+    ->name('history');
