@@ -28,6 +28,8 @@ $userLevel =session()->get('level'); // Sesuaikan dengan cara Anda menyimpan lev
                         <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor" />
                         <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor" />
                     </svg> -->
+                    <img src="{{ asset('storage/logos/' . optional(App\Models\Setting::first())->logo) }}" alt="Logo" style="max-width: 50px;">
+
                 </div>
             </div>
             <!--logo End-->
@@ -180,8 +182,9 @@ $userLevel =session()->get('level'); // Sesuaikan dengan cara Anda menyimpan lev
                         <span class="mini-icon">-</span>
                     </a>
                 </li>
+                @if(Permission::hasAccess($userLevel, 'Data'))
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#sidebar-special" role="button" aria-expanded="false" aria-controls="sidebar-special">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#sidebar-data-periode-guru" role="button" aria-expanded="false" aria-controls="sidebar-data-periode-guru">
                         <i class="icon">
                             <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path opacity="0.4" d="M11.9912 18.6215L5.49945 21.864C5.00921 22.1302 4.39768 21.9525 4.12348 21.4643C4.0434 21.3108 4.00106 21.1402 4 20.9668V13.7087C4 14.4283 4.40573 14.8725 5.47299 15.37L11.9912 18.6215Z" fill="currentColor"></path>
@@ -195,29 +198,23 @@ $userLevel =session()->get('level'); // Sesuaikan dengan cara Anda menyimpan lev
                             </svg>
                         </i>
                     </a>
-                    <ul class="sub-nav collapse" id="sidebar-special" data-bs-parent="#sidebar-menu">
+                    <ul class="sub-nav collapse" id="sidebar-data-periode-guru" data-bs-parent="#sidebar-menu">
                         <li class="nav-item">
-                            <a class="nav-link " href="{{route ('periode')}}">
+                            <a class="nav-link" href="{{route ('periode')}}">
                                 <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                                        <g>
-                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                                        </g>
+                                        <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
                                     </svg>
                                 </i>
                                 <i class="sidenav-mini-icon"> Periode </i>
                                 <span class="item-name">Data Periode</span>
                             </a>
                         </li>
-                    </ul>
-                    <ul class="sub-nav collapse" id="sidebar-special" data-bs-parent="#sidebar-menu">
                         <li class="nav-item">
-                            <a class="nav-link " href="{{route ('guru')}}">
+                            <a class="nav-link" href="{{route ('guru')}}">
                                 <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                                        <g>
-                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                                        </g>
+                                        <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
                                     </svg>
                                 </i>
                                 <i class="sidenav-mini-icon"> Guru </i>
@@ -226,7 +223,56 @@ $userLevel =session()->get('level'); // Sesuaikan dengan cara Anda menyimpan lev
                         </li>
                     </ul>
                 </li>
-              
+                @endif
+                @if(Permission::hasAccess($userLevel, 'UlasanGuru'))
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#sidebar2-special2" role="button" aria-expanded="false" aria-controls="sidebar2-special2">
+                        <i class="icon">
+                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.4" d="M11.9912 18.6215L5.49945 21.864C5.00921 22.1302 4.39768 21.9525 4.12348 21.4643C4.0434 21.3108 4.00106 21.1402 4 20.9668V13.7087C4 14.4283 4.40573 14.8725 5.47299 15.37L11.9912 18.6215Z" fill="currentColor"></path>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M8.89526 2H15.0695C17.7773 2 19.9735 3.06605 20 5.79337V20.9668C19.9989 21.1374 19.9565 21.3051 19.8765 21.4554C19.7479 21.7007 19.5259 21.8827 19.2615 21.9598C18.997 22.0368 18.7128 22.0023 18.4741 21.8641L11.9912 18.6215L5.47299 15.3701C4.40573 14.8726 4 14.4284 4 13.7088V5.79337C4 3.06605 6.19625 2 8.89526 2ZM8.22492 9.62227H15.7486C16.1822 9.62227 16.5336 9.26828 16.5336 8.83162C16.5336 8.39495 16.1822 8.04096 15.7486 8.04096H8.22492C7.79137 8.04096 7.43991 8.39495 7.43991 8.83162C7.43991 9.26828 7.79137 9.62227 8.22492 9.62227Z" fill="currentColor"></path>
+                            </svg>
+                        </i>
+                        <span class="item-name">Ulasan Guru</span>
+                        <i class="right-icon">
+                            <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </i>
+                    </a>
+                    <ul class="sub-nav collapse" id="sidebar2-special2" data-bs-parent="#sidebar-menu">
+                        <li class="nav-item">
+                            <a class="nav-link " href="{{route ('ulasan_guru')}}">
+                                <i class="icon">
+                                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                        <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                        </g>
+                                    </svg>
+                                </i>
+                                <i class="sidenav-mini-icon"> Ulasan Guru </i>
+                                <span class="item-name">Ulasan Guru</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="sub-nav collapse" id="sidebar2-special2" data-bs-parent="#sidebar-menu">
+                        <li class="nav-item">
+                            <a class="nav-link " href="{{route ('print_laporan')}}">
+                                <i class="icon">
+                                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                        <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                        </g>
+                                    </svg>
+                                </i>
+                                <i class="sidenav-mini-icon"> Laporan </i>
+                                <span class="item-name">Laporan</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @endif
+                @if(Permission::hasAccess($userLevel, 'Ulasan'))
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#sidebar-auth" role="button" aria-expanded="false" aria-controls="sidebar-user">
                         <i class="icon">
@@ -271,6 +317,7 @@ $userLevel =session()->get('level'); // Sesuaikan dengan cara Anda menyimpan lev
                         </li>
                     </ul>
                 </li>
+                @endif
             </ul>
             <!-- Sidebar Menu End -->
         </div>
@@ -289,20 +336,24 @@ $userLevel =session()->get('level'); // Sesuaikan dengan cara Anda menyimpan lev
                     <!--Logo start-->
                     <div class="logo-main">
                         <div class="logo-normal">
-                            <svg class="text-primary icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- <svg class="text-primary icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor" />
                                 <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor" />
                                 <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor" />
                                 <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor" />
-                            </svg>
+                            </svg> -->
+                            <img src="{{ asset('storage/logos/' . optional(App\Models\Setting::first())->logo) }}" alt="Logo" style="max-width: 50px;">
+
                         </div>
                         <div class="logo-mini">
-                            <svg class="text-primary icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- <svg class="text-primary icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor" />
                                 <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor" />
                                 <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor" />
                                 <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor" />
-                            </svg>
+                            </svg> -->
+                            <img src="{{ asset('storage/logos/' . optional(App\Models\Setting::first())->logo) }}" alt="Logo" style="max-width: 50px;">
+
                         </div>
                     </div>
                     <!--logo End-->

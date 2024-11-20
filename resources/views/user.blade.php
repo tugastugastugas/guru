@@ -87,10 +87,8 @@
                         <label for="level" class="form-label">Level</label>
                         <select class="form-select" id="level" name="level" required>
                             <option value="Admin">Admin</option>
-                            <option value="Kepsek">Kepsek</option>
                             <option value="Kesiswaan">Kesiswaan</option>
-                            <option value="Guru">Guru</option>
-                            <option value="HRD">HRD</option>
+                            <option value="Murid">Murid</option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Simpan</button>

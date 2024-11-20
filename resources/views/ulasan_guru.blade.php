@@ -21,7 +21,7 @@
                     <!-- Dynamically generate tab content for each periode -->
                     @foreach($ulasan->groupBy('nama_periode') as $periode => $items)
                     <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="tab-{{ Str::slug($periode) }}" role="tabpanel" aria-labelledby="tab-{{ Str::slug($periode) }}-tab">
-                        <table class="table table-striped mt-3">
+                        <table id="datatable" class="table table-striped" data-toggle="data-table">
                             <thead>
                                 <tr>
                                     <th>Username</th>

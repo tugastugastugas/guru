@@ -13,7 +13,7 @@ use App\Http\Controllers\RestoreDeleteController;
 use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\UlasanController;
-
+use App\Http\Controllers\LaporanController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -114,3 +114,13 @@ Route::get('/ulasan/ganti', [UlasanController::class, 'gantiUlasan'])->name('gan
 // ROUTE HISTORY
 Route::get('/history', [UlasanController::class, 'history'])
     ->name('history');
+
+
+// ROUTE ULASAN_GURU
+Route::get('/ulasan_guru', [UlasanController::class, 'ulasan_guru'])
+    ->name('ulasan_guru');
+
+// ROUTE LAPORAN
+Route::get('/print_laporan', [LaporanController::class, 'print_laporan'])
+    ->name('print_laporan');
+Route::get('/printLaporan', [LaporanController::class, 'printLaporan'])->name('printLaporan');
