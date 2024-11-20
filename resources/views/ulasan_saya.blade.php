@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between">
                 <div class="header-title">
-                    <h4 class="card-title">History</h4>
+                    <h4 class="card-title">Ulasan Saya</h4>
                 </div>
             </div>
             <div class="card-body">
@@ -24,7 +24,6 @@
                         <table id="datatable" class="table table-striped" data-toggle="data-table">
                             <thead>
                                 <tr>
-                                    <th>Username</th>
                                     <th>Nama Guru</th>
                                     <th>Mapel</th>
                                     <th>Kritikan</th>
@@ -34,7 +33,6 @@
                             <tbody>
                                 @foreach($items as $sm)
                                 <tr>
-                                    <td>{{ $sm->username }}</td>
                                     <td>{{ $sm->nama_guru }}</td>
                                     <td>{{ $sm->mapel_guru }}</td>
                                     <td>{{ $sm->kritikan }}</td>

@@ -263,4 +263,38 @@ class UlasanController extends BaseController
         echo view('ulasan_guru', compact('ulasan'));
         echo view('footer');
     }
+
+    public function ulasan_saya()
+    {
+        ActivityLog::create([
+            'action' => 'create',
+            'user_id' => Session::get('id'), // ID pengguna yang sedang login
+            'description' => 'User Masuk Ke Buat Guru.',
+        ]);
+
+        $id_user = Session::get('id');
+
+        // Mengambil data dengan pengelompokan berdasarkan periode
+        $ulasan = DB::table('ulasan')
+            ->join('user', 'user.id_user', '=', 'ulasan.id_user')
+            ->join('periode', 'periode.id_periode', '=', 'ulasan.id_periode')
+            ->join('guru', 'guru.id_guru', '=', 'ulasan.id_guru')
+            ->select(
+                'user.username',
+                'guru.nama_guru',
+                'guru.mapel_guru',
+                'periode.nama_periode',
+                'ulasan.kritikan',
+                'ulasan.pujian',
+                'ulasan.id_guru'
+            )
+    
+            ->groupBy('periode.nama_periode', 'user.username', 'guru.nama_guru', 'guru.mapel_guru', 'ulasan.kritikan', 'ulasan.pujian', 'ulasan.id_guru') // Mengelompokkan berdasarkan periode
+            ->get();
+
+        echo view('header');
+        echo view('menu');
+        echo view('ulasan_saya', compact('ulasan'));
+        echo view('footer');
+    }
 }

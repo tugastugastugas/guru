@@ -114,7 +114,8 @@ Route::get('/ulasan/ganti', [UlasanController::class, 'gantiUlasan'])->name('gan
 // ROUTE HISTORY
 Route::get('/history', [UlasanController::class, 'history'])
     ->name('history');
-
+    Route::get('/ulasan_saya', [UlasanController::class, 'ulasan_saya'])
+    ->name('ulasan_saya');
 
 // ROUTE ULASAN_GURU
 Route::get('/ulasan_guru', [UlasanController::class, 'ulasan_guru'])

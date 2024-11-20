@@ -36,6 +36,13 @@
                                 Ulasan
                             </label>
                         </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" name="menus[]" value="UlasanSaya"
+                                    {{ isset($permissions['UlasanSaya']) && $permissions['UlasanSaya'] ? 'checked' : '' }}>
+                                UlasanSaya
+                            </label>
+                        </div>
                         <button type="submit" class="btn btn-primary">Save Permissions</button>
                     </form>
                 </div>
