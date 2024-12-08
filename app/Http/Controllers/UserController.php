@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 
 class UserController extends BaseController
@@ -47,7 +49,6 @@ class UserController extends BaseController
             $request->validate([
                 'username' => 'required',
                 'password' => 'required',
-                'email' => 'required',
                 'level' => 'required',
             ]);
 
@@ -55,7 +56,6 @@ class UserController extends BaseController
             $user = new User(); // Ubah variabel dari $quiz menjadi $user untuk kejelasan
             $user->username = $request->input('username');
             $user->password = md5($request->input('password')); // Enkripsi password
-            $user->email = $request->input('email');
             $user->level = $request->input('level');
 
             // Simpan ke database
@@ -64,6 +64,42 @@ class UserController extends BaseController
             // Redirect ke halaman lain
             return redirect()->back()->withErrors(['msg' => 'Berhasil Menambahkan Akun.']);
         } catch (\Exception $e) {
+            // Redirect kembali dengan pesan kesalahan
+            return redirect()->back()->withErrors(['msg' => 'Gagal menambahkan akun. Silakan coba lagi.']);
+        }
+    }
+
+    public function t_murid(Request $request)
+    {
+        ActivityLog::create([
+            'action' => 'create',
+            'user_id' => Session::get('id'), // ID pengguna yang sedang login
+            'description' => 'User Menambah User.',
+        ]);
+
+        try {
+            // Validasi inputan
+            $request->validate([
+                'username' => 'required',
+                'password' => 'required',
+                'nis' => 'required',
+            ]);
+
+            // Simpan data ke tabel user
+            $user = new User(); // Ubah variabel dari $quiz menjadi $user untuk kejelasan
+            $user->username = $request->input('username');
+            $user->password = md5($request->input('password')); // Enkripsi password
+            $user->nis = $request->input('nis');
+            $user->level = 'Murid';
+
+            // Simpan ke database
+            $user->save();
+
+            // Redirect ke halaman lain
+            return redirect()->back()->withErrors(['msg' => 'Berhasil Menambahkan Akun.']);
+        } catch (\Exception $e) {
+            Log::error('Gagal: ' . $e->getMessage());
+
             // Redirect kembali dengan pesan kesalahan
             return redirect()->back()->withErrors(['msg' => 'Gagal menambahkan akun. Silakan coba lagi.']);
         }
@@ -149,7 +185,6 @@ class UserController extends BaseController
             // Validasi input
             $request->validate([
                 'username' => 'required',
-                'email' => 'required',
                 'level' => 'required',
                 // Validasi lain sesuai kebutuhan
             ]);
@@ -161,7 +196,7 @@ class UserController extends BaseController
             UserHistory::create([
                 'id_user' => $user->id_user,
                 'username' => $user->username,
-                'email' => $user->email,
+                'nis' => $user->nis,
                 'level' => $user->level,
                 'created_at' => $user->created_at,
                 'updated_at' => $user->updated_at,
@@ -169,7 +204,7 @@ class UserController extends BaseController
 
             // Perbarui data user
             $user->username = $request->input('username');
-            $user->email = $request->input('email');
+            $user->nis = $request->input('nis');
             $user->level = $request->input('level');
             $user->save();
 
@@ -183,4 +218,53 @@ class UserController extends BaseController
             return redirect()->back()->withErrors(['msg' => 'Gagal memperbarui detail pengguna. Silakan coba lagi.']);
         }
     }
+
+    public function changePassword(Request $request)
+{
+    try {
+    // Validasi input
+    $request->validate([
+        'old_password' => 'required',
+        'new_password' => 'required',
+        'confirm_password' => 'required|same:new_password',
+    ]);
+   
+    // Ambil id_user dari session
+    $id_user = session()->get('id');
+
+    if (!$id_user) {
+        return back()->with('error', 'Session expired. Please log in again.');
+    }
+
+    // Ambil data user dari database
+    $user = DB::table('user')->where('id_user', $id_user)->first();
+    if (!$user) {
+        return back()->with('error', 'User not found.');
+    }
+
+    // Cocokkan old password
+    if ($user->password !== md5($request->old_password)) {
+        return back()->with('error', 'Old password is incorrect.');
+    }
+
+    
+
+    // Update password
+    $update = DB::table('user')
+        ->where('id_user', $id_user)
+        ->update([
+            'password' => md5($request->new_password),
+            'updated_at' => now(),
+        ]);
+
+  
+        return back()->with('success', 'Password updated.');
+    
+} catch (\Exception $e) {
+    Log::error('Gagal : ' . $e->getMessage());
+    
+    return back()->with('success', 'Password has been updated successfully.');
+}
+}
+
 }

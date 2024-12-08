@@ -72,6 +72,7 @@ $userLevel =session()->get('level'); // Sesuaikan dengan cara Anda menyimpan lev
                     </a>
                 </li>
 
+                
                 @if(Permission::hasAccess($userLevel, 'setting'))
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#horizontal-menu" role="button" aria-expanded="false" aria-controls="horizontal-menu">
@@ -351,6 +352,9 @@ $userLevel =session()->get('level'); // Sesuaikan dengan cara Anda menyimpan lev
                     </ul>
                 </li>
                 @endif
+
+            
+                
             </ul>
             <!-- Sidebar Menu End -->
         </div>
@@ -430,25 +434,10 @@ $userLevel =session()->get('level'); // Sesuaikan dengan cara Anda menyimpan lev
                                 Log Out
                             </a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a href="#" class="search-toggle nav-link" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="{{ asset ('images/Flag/flag001.png') }}" class="img-fluid rounded-circle" alt="user" style="height: 30px; min-width: 30px; width: 30px;">
-                                <span class="bg-primary"></span>
-                            </a>
-                            <div class="p-0 sub-drop dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton2">
-                                <div class="m-0 border-0 shadow-none card">
-                                    <div class="p-0 ">
-                                        <ul class="p-0 list-group list-group-flush">
-                                            <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img src="{{ asset ('images/Flag/flag-03.png') }}" alt="img-flaf" class="img-fluid me-2" style="width: 15px;height: 15px;min-width: 15px;" />Spanish</a></li>
-                                            <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img src="{{ asset ('images/Flag/flag-04.png') }}" alt="img-flaf" class="img-fluid me-2" style="width: 15px;height: 15px;min-width: 15px;" />Italian</a></li>
-                                            <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img src="{{ asset ('images/Flag/flag-02.png') }}" alt="img-flaf" class="img-fluid me-2" style="width: 15px;height: 15px;min-width: 15px;" />French</a></li>
-                                            <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img src="{{ asset ('images/Flag/flag-05.png') }}" alt="img-flaf" class="img-fluid me-2" style="width: 15px;height: 15px;min-width: 15px;" />German</a></li>
-                                            <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img src="{{ asset ('images/Flag/flag-06.png') }}" alt="img-flaf" class="img-fluid me-2" style="width: 15px;height: 15px;min-width: 15px;" />Japanese</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                        <button type="button" class="btn btn-outline-primary kirim-surat" data-bs-toggle="modal" data-bs-target="#folderModal">
+                    Change Password
+                    </button>
+                        
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link" id="notification-drop" data-bs-toggle="dropdown">
                                 <svg class="icon-24" width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -653,3 +642,34 @@ $userLevel =session()->get('level'); // Sesuaikan dengan cara Anda menyimpan lev
         </div> <!-- Nav Header Component End -->
         <!--Nav End-->
     </div>
+
+    
+    <div class="modal fade" id="folderModal" tabindex="-1" aria-labelledby="folderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="folderModalLabel">Change Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('change_password') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="old_password" class="form-label">Old Password</label>
+                        <input type="password" class="form-control" id="old_password" name="old_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="new_password" name="new_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">Confirm New Password</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Change Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

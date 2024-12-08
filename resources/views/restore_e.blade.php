@@ -13,7 +13,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Email</th>
+                                <th>NIS</th>
                                 <th>Level</th>
                                 <th>Tanggal Dibuat</th>
                                 <th>Aksi</th>
@@ -24,7 +24,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data->username }}</td>
-                                <td>{{ $data->email }}</td>
+                                <td>{{ $data->nis }}</td>
                                 <td>{{ $data->level }}</td>
                                 <td>{{ $data->created_at }}</td>
                                 <td>
@@ -45,7 +45,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Email</th>
+                                <th>NIS</th>
                                 <th>Level</th>
                                 <th>Tanggal Dibuat</th>
                                 <th>Aksi</th>

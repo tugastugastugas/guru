@@ -6,6 +6,7 @@
                     <h4 class="card-title">User</h4>
                     <br>
                     <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">Add New User</button>
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addMuridModal">Add New Murid</button>
                 </div>
             </div>
             <div class="card-body">
@@ -80,16 +81,43 @@
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="text" class="form-control" id="email" name="email" required>
-                    </div>
-                    <div class="mb-3">
                         <label for="level" class="form-label">Level</label>
                         <select class="form-select" id="level" name="level" required>
                             <option value="Admin">Admin</option>
                             <option value="Kesiswaan">Kesiswaan</option>
-                            <option value="Murid">Murid</option>
                         </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal untuk Menambah Pengguna -->
+<div class="modal fade" id="addMuridModal" tabindex="-1" aria-labelledby="addMuridModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addMuridModalLabel">Tambah Pengguna</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('t_murid') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">NIS</label>
+                        <input type="text" class="form-control" id="nis" name="nis" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>

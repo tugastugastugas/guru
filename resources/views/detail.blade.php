@@ -13,8 +13,8 @@
                 <input type="text" class="form-control" id="exampleInputEmail1" name="username" value="{{ $user->username }}">
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail1">Email User</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" name="email" value="{{ $user->email }}">
+                <label for="exampleInputEmail1">Nis User</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" name="nis" value="{{ $user->nis }}">
             </div>
             <div class="form-group">
                 <label for="level">Level</label>
@@ -24,7 +24,6 @@
                     <option value="Kepsek">Kepsek</option>
                     <option value="Kesiswaan">Kesiswaan</option>
                     <option value="Guru">Guru</option>
-                    <option value="HRD">HRD</option>
                 </select>
             </div>
             <input type="hidden" name="id" value="{{ $user->id_user }}">

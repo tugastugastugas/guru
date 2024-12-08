@@ -36,7 +36,7 @@ Route::get('/register', [LoginController::class, 'register'])->name('register');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('/tambah_akun', [LoginController::class, 'tambah_akun'])->name('tambah_akun');
 Route::get('/captcha', [LoginController::class, 'captcha'])->name('captcha');
-
+Route::post('/change-password', [UserController::class, 'changePassword'])->name('change_password');
 
 
 // ROUTE SETTING
@@ -79,6 +79,7 @@ Route::get('/user', [UserController::class, 'user'])
     ->middleware('check.permission:setting')
     ->name('user');
 Route::post('/t_user', [UserController::class, 't_user'])->name('t_user');
+Route::post('/t_murid', [UserController::class, 't_murid'])->name('t_murid');
 Route::post('/user/reset-password/{id}', [UserController::class, 'resetPassword'])->name('user.resetPassword');
 Route::post('/user/update', [UserController::class, 'updateDetail'])->name('update.user');
 Route::delete('/user-destroy/{id_user}', [UserController::class, 'user_destroy'])->name('user.destroy');
@@ -114,7 +115,7 @@ Route::get('/ulasan/ganti', [UlasanController::class, 'gantiUlasan'])->name('gan
 // ROUTE HISTORY
 Route::get('/history', [UlasanController::class, 'history'])
     ->name('history');
-    Route::get('/ulasan_saya', [UlasanController::class, 'ulasan_saya'])
+Route::get('/ulasan_saya', [UlasanController::class, 'ulasan_saya'])
     ->name('ulasan_saya');
 
 // ROUTE ULASAN_GURU
